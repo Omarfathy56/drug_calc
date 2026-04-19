@@ -107,10 +107,10 @@ if weight:
 
                                         st.write(f"Volume of Distribution (Vd): {vd:.2f} L")
                                         st.write(f"Clearance (Cl): {cl:.2f} L/hr")
-                                        st.write(f"{old_dose_statues} Dose (Ld): {ld:.2f} mg")
+                                        st.write(f" Old Dose (Ld): {ld:.2f} mg")
                                         st.write(f"Maintenance Dose (Md): {md:.2f} mg")
-                                        st.write(f"New Dose (Mg/kg) {new_dose:.2f}Mg")
-                                        st.write(f"Clcr (mL/min){clcr:.2f}mL/min")
+                                        st.write(f"New Dose (Mg/kg): {new_dose:.2f}Mg")
+                                        st.write(f"Clcr (mL/min): {clcr:.2f}mL/min")
 
                                         st.write(f"Half-life (t½): {t_half}")
 
