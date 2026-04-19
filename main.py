@@ -110,7 +110,7 @@ if weight:
                                         st.write(f"{old_dose_statues} Dose (Ld): {ld:.2f} mg")
                                         st.write(f"Maintenance Dose (Md): {md:.2f} mg")
                                         st.write(f"New Dose (Mg/kg) {new_dose:.2f}Mg")
-                                        st.write(f"Clcr (mL/min /1.73m2){clcr:.2f}mL/min /1.73m2")
+                                        st.write(f"Clcr (mL/min){clcr:.2f}mL/min")
 
                                         st.write(f"Half-life (t½): {t_half}")
 
