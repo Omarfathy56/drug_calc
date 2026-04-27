@@ -103,15 +103,6 @@ if weight:
 
                                     elif drug == "Flucytosine":
                                         t_half = "3–6 hr"
-
-                                    # -------------------------
-                                    # Interval (τ)
-                                    # -------------------------
-                                    if drug == "Flucytosine":
-                                        interval = (0.693 * vd) / cl
-                                    else:
-                                        interval = (cl * css) / css
-
                                     # -------------------------
                                     # Results
                                     # -------------------------
@@ -127,7 +118,7 @@ if weight:
                                     st.write(f"Half-life (t½): {t_half}")
                                     if drug != "Flucytosine":
                                         st.write(f"Infusion Rate: {infusion_rate:.2f} mg/hr")
-                                    st.write(f"Suggested Interval (τ): {interval:.2f} hr")
+                                    
                                     
                                     
                                     st.markdown("---")
