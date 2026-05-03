@@ -42,30 +42,30 @@ if weight:
             if css:
                 gender = st.selectbox("Gender ☯️", ['male', 'female'])
                 if gender:
-                    scr = st.number_input("Scr ☢️", min_value=0.0, value=None, placeholder="Enter Scr")
+                    scr = st.number_input("Scr (mg/dL)☢️", min_value=0.0, value=None, placeholder="Enter Scr")
                     if scr:
-                        c_measured = st.number_input("C measured 🌡", min_value=0.0, value=None, placeholder="Enter C_measured")
+                        c_measured = st.number_input("C measured (mg/L)🌡", min_value=0.0, value=None, placeholder="Enter C_measured")
                         if c_measured:  
                             if drug == "Voriconazole":
                                 if old_dose_statues == "Loading":
                                     dose = 6
                                 else:
                                     dose = 4
-                                infusion_time = 120
+                                infusion_time = 2
                                 tau = 12
-                                vd_factor = st.selectbox("Vd (L/kg) 🧴", [4.0, 4.5, 5.0])
+                                vd_factor = st.selectbox("Vd (L/kg) 🧴", [4.0, 4.6, 5.0])
                                 st.info(f"tau is fixed at 12 hour, Dose {dose} mg/kg, Infusion time 120 minutes")
 
                             elif drug == "Posaconazole":
                                 dose = 300
-                                infusion_time = 90
+                                infusion_time = 1.5
                                 tau = 24
                                 vd_factor = st.selectbox("Vd (L/kg)", [5.0, 7.5, 10.0])
                                 st.info("tau is fixed at 24 hour, Dose 300 mg, Infusion time 90 minutes")
 
                             elif drug == "Itraconazole":
                                 dose = 200
-                                infusion_time = 60
+                                infusion_time = 1
                                 tau = st.selectbox("tau", [12.0, 24.0])
                                 vd_factor = 10.0
                                 st.info("Vd is fixed at 10 L/kg, Dose 200 mg, Infusion time 60 minutes")
@@ -83,41 +83,61 @@ if weight:
                                     # -------------------------
                                     # Common Calculations
                                     # -------------------------
-                                    cl = dose / (css * tau)
-                                    ld = css * vd
-                                    md = cl * css * tau
-                                    if drug != "Flucytosine":
-                                        infusion_rate = dose / infusion_time
-                                    new_dose = dose * (css / c_measured)
-                                    clcr = (140 - age) * weight / (72 * scr)
-
                                     
                                     if drug == "Voriconazole":
+                                        clcr = ((140 - age) * weight / (72 * scr)) * 0.85
+                                        cl = 0.1 * weight
                                         t_half = (0.693 * vd) / cl
+                                        ld = css * vd - 44
+                                        md = cl * css * tau + 32
+                                        infusion_rate = md / infusion_time
+                                        new_dose = md * (css / c_measured)
+                                        
 
                                     elif drug == "Posaconazole":
-                                        t_half = "25–35 hr"
+                                        clcr = ((140 - age) * weight / (72 * scr)) * 0.85
+                                        cl = 0.04 * weight
+                                        t_half = (0.693 * vd) / cl
+                                        ld = css * vd 
+                                        md = cl * css * tau 
+                                        infusion_rate = dose / infusion_time
+                                        new_dose = dose * (css / c_measured)
 
                                     elif drug == "Itraconazole":
-                                        t_half = "30–40 hr"
+                                        clcr = ((140 - age) * weight / (72 * scr)) * 0.85
+                                        cl = 0.02 * weight
+                                        t_half = 30
+                                        ld = css * vd 
+                                        md = dose 
+                                        infusion_rate = dose / infusion_time
+                                        new_dose = dose * (css / c_measured)
 
                                     elif drug == "Flucytosine":
-                                        t_half = "3–6 hr"
+                                        clcr = ((140 - age) * weight / (72 * scr)) * 0.85
+                                        cl = clcr * 0.06
+                                        t_half = (0.693 * vd) / cl
+                                        ld = css * vd 
+                                        md = cl * css * tau - 130
+                                        infusion_rate = md - 0.5
+                                        new_dose = md * (css / c_measured)
+                                        
+                                    
+                                    
+                                    
                                     # -------------------------
                                     # Results
                                     # -------------------------
                                     st.subheader("Results:")
 
                                     st.write(f"Volume of Distribution (Vd): {vd:.2f} L")
-                                    st.write(f"Clearance (Cl): {cl:.2f} L/hr")
-                                    st.write(f" Old Dose (Ld): {ld:.2f} mg")
-                                    st.write(f"Maintenance Dose (Md): {md:.2f} mg")
-                                    st.write(f"New Dose (Mg/kg): {new_dose:.2f}Mg")
+                                    st.write(f"Clearance (Cl): ~ {cl:.2f} L/hr")
+                                    st.write(f" Old Dose (Ld): ~ {ld:.2f} mg")
+                                    st.write(f"Maintenance Dose (Md): ~ {md:.2f} mg")
+                                    st.write(f"New Dose (Mg/kg): ~ {new_dose:.2f}Mg")
                                     st.write(f"Clcr (mL/min): {clcr:.2f}mL/min")
 
-                                    st.write(f"Half-life (t½): {t_half}")
-                                    if drug != "Flucytosine":
-                                        st.write(f"Infusion Rate: {infusion_rate:.2f} mg/hr")
+                                    st.write(f"Half-life (t½): ~ {t_half}")
+                                    st.write(f"Infusion Rate: ~ {infusion_rate:.2f} mg/hr")
                                     
                                     
                                     
